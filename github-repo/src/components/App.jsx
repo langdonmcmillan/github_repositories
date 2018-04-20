@@ -22,6 +22,7 @@ class App extends Component {
     errorMessage: null
   };
   handleSearch = async () => {
+    this.setState({ loading: true });
     try {
       const response = await axios({
         method: "GET",
@@ -31,7 +32,7 @@ class App extends Component {
           "Content-Type": "application/json"
         }
       });
-      this.setState({ repositories: response.data });
+      this.setState({ repositories: response.data, loading: false });
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -41,7 +42,8 @@ class App extends Component {
       this.setState({
         error: true,
         errorMessage,
-        repositories: []
+        repositories: [],
+        loading: false
       });
     }
   };
@@ -87,7 +89,7 @@ class App extends Component {
                   fluid
                   size="large"
                   onClick={this.handleSearch}
-                  disabled={this.state.touched && !this.state.userName}
+                  disabled={!this.state.userName}
                 >
                   Search
                 </Button>
